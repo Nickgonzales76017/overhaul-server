@@ -1,6 +1,10 @@
 const Pool = require('pg').Pool
 const pool = new Pool({
-
+  user: 'postgres',
+  host: 'db.mdmjzfqohzoffypmbugq.supabase.co',
+  database: 'postgres',
+  password: 'Ch3wbaca01475369',
+  port: 5432,
 })
 const createTable = (request, response) => {
   const text = `
@@ -44,7 +48,7 @@ const createTable = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(201).send(`User added with ID: ${results.rows[0].id}`)
+      response.status(201).send(JSON.stringify(`${results.rows[0].id}`))
     })
   }
   const updateUser = (request, response) => {
