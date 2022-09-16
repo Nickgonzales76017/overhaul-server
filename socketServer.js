@@ -22,7 +22,15 @@ const io = require('socket.io')(http, {
 app.get('/', (req, res) => {
   res.send('<h1>Hey Socket.io</h1>');
 });
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 app.use(cors())
+app.get('/api/listAllUsers', function (req, res) {
+  console.log(res)
+  res.send(connectedusers)
+  //res.end();
+})
+
 console.log('=================');
 console.log('Socket Session Started');
 http.listen(process.env.socketIOPort, () => {
@@ -44,10 +52,26 @@ io.on('connection', (socket) => {
       console.log('user disconnected');
     });
     socket.on('send-nickname', function(username) {
-      socket.username = username;
+      socket.user = username;
+      console.log('==================')
+      console.log(socket.user.id)
+
+      let obj = connectedusers.find((o, index) => {
+        if(o.id === socket.user.id){
+          connectedusers[index] = {
+            userID: socket.id,
+            ...socket.user,
+          }
+          return o;
+      }});
+      console.log(obj);
+      if(obj){
+        io.emit('reconnect', 1);
+        return true;
+      }
       connectedusers.push({
         userID: socket.id,
-        username: socket.username,
+        ...socket.user,
       });
       //users.push(socket.username);
       //console.log(users);

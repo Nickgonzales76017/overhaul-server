@@ -49,7 +49,7 @@ storage: multerS3({
 //set ports to env
 //send console logs to update on admin backend  (push to arrays)
 app.get('/', (req, res) => {
-  res.send('<h1>Hey Socket.io</h1>');
+  res.send('<h1>Hey Micro</h1>');
 });
 app.use(cors())
 app.use(express.urlencoded({ extended: true }));
